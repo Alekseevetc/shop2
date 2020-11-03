@@ -1,0 +1,76 @@
+<%- include('../layouts/header.ejs')  %>
+
+<div id="mainBody">
+    <div class="container">
+        <div class="row">
+
+            <%- include('../layouts/sidebar.ejs')  %>
+
+            <div class="span9">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+                    <li class="active"> SHOPPING CART</li>
+                </ul>
+                <h3> SHOPPING CART [ <small>3 Item(s) </small>]<a href="/" class="btn btn-large pull-right"><i
+                            class="icon-arrow-left"></i> Continue Shopping </a></h3>
+                <hr class="soft" />
+                <% if (product.length > 0) { %>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Description</th>
+                            <th>Quantity/Update</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% product.forEach(productItem => { %>
+                        <!-- ============ <%= productItem %>
+                        <% productItem.productId  %> -->
+                        <tr>
+                            <td> <img width="60" src="<%= productItem.productId.imageUrl %>"
+                                    alt="<%= productItem.productId.title %>" /></td>
+                            <td><%= productItem.productId.title  %></td>
+                            <td>
+                                <div class="input-append"><input class="span1" style="max-width:34px"
+                                        value="<%= productItem.productId.quantity %>" id="appendedInputButtons"
+                                        size="16" type="text"><button class="btn" type="button"><i
+                                            class="icon-minus"></i></button><button class="btn" type="button"><i
+                                            class="icon-plus"></i></button>
+                                    <form action="/cart-delete-item" method="POST">
+                                        <input type="hidden" value="<%= productItem %>" name="productId">
+                                        <button class="btn danger" type="submit"><i
+                                                class="icon-remove icon-red"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td><%= productItem.productId.price %></td>
+                            <td><%= productItem.productId.sale %></td>
+                            <td><%= productItem.productId.price *  productItem.productId.quantity %></td>
+                        </tr>
+                        <% }) %>
+                        <tr>
+                            <td colspan="6" style="text-align:right"><strong>TOTAL =</strong></td>
+                            <td class="label label-important" style="display:block"> <strong> $155.00 </strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <% } else { %>
+                <h2>No products found.</h2>
+                <% } %>
+                <form action="/make-order" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <button type="submit" class="btn btn-large pull-right">Order now <i
+                            class="fas fa-shopping-cart"></i></button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MainBody End ============================= -->
+<%- include('../layouts/footer.ejs') %>
